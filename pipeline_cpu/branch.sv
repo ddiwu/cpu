@@ -52,7 +52,7 @@ module branch(
                 else if(alu_result == 32'b0)
                 begin
                     jump_en = 1'b1;
-                    jump_target = PC + imm;
+                    jump_target = PC -32'h8 + imm;
                 end
                 else
                 begin

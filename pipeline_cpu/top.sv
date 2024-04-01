@@ -83,7 +83,7 @@ module top(
     logic        mem_we_2r;
     logic        mem_we;
     logic        mem_we_sel;
-    logic [9:0]  mem_addr;
+    logic [12:0] mem_addr;
     logic [31:0] mem_wdata;
     logic [31:0] mem_wdatacl;//变长
     logic [31:0] mem_rdata_r;
@@ -109,12 +109,14 @@ module top(
     logic [1:0]  wlong;
     logic [1:0]  wlong_r;
     logic [1:0]  wlong_2r;
-    logic [1:0]  wlong_3r;
+    logic [11:0] wlongus;//标识半字u/s扩展
+    //logic [31:0] st_researve;
+    //logic [1:0]  wlong_3r;
     logic [31:0] PC_r;
     logic [31:0] PC_2r;
 
 
-    assign mem_addr = alu_result_2r[11:2];
+    assign mem_addr = alu_result_2r[14:2];
     //assign mem_wdata = rf_data2;//此时mem_wdata与rf_data2直接相连，但是rf_data2是执行阶段产生的信号，要到访存阶段才能写入内存，所以再加一个寄存器
 
     //hazard
@@ -186,15 +188,15 @@ register_decode2(
 
     //执行阶段->访存阶段
     register #(
-        .WIDTH(107),
+        .WIDTH(119),
         .RST_VAL(0)
     )
 register_execute (
         .clk(clk),
         .rstn(rstn),
         .en(1'b1),
-        .d({alu_result_r,jump_en_r,jump_target_r,mem_we_2r,rf_rd_2r,rf_we_2r,wb_sel_2r,rf_data2,wlong_2r}),//此处mem_we发挥作用结束
-        .q({alu_result_2r,jump_en,jump_target,mem_we,rf_rd_3r,rf_we_3r,wb_sel_3r,mem_wdata,wlong_3r})
+        .d({alu_result_r,jump_en_r,jump_target_r,mem_we_2r,rf_rd_2r,rf_we_2r,wb_sel_2r,rf_data2,wlong_2r,b_op}),//此处mem_we发挥作用结束
+        .q({alu_result_2r,jump_en,jump_target,mem_we,rf_rd_3r,rf_we_3r,wb_sel_3r,mem_wdata,wlong,wlongus})
     );
 
     //访存阶段->写回阶段
@@ -206,8 +208,8 @@ register_mem (
         .clk(clk),
         .rstn(rstn),
         .en(1'b1),
-        .d({alu_result_2r,mem_rdata_r,rf_we_3r,rf_rd_3r,wb_sel_3r,wlong_3r}),
-        .q({alu_result,mem_rdata,rf_we,rf_rd,wb_sel,wlong})
+        .d({alu_result_2r,mem_rdata_r,rf_we_3r,rf_rd_3r,wb_sel_3r/*,wlong_3r*/}),
+        .q({alu_result,mem_rdata,rf_we,rf_rd,wb_sel/*,wlong*/})
     );
 
     register #(
@@ -258,20 +260,43 @@ register_branch (
     begin
         case (wlong)
             2'b00: mem_rdata_r = mem_rdataw;
-            2'b01: mem_rdata_r = {24'b0,mem_rdataw[7:0]};//byte
-            2'b10: mem_rdata_r = {16'b0,mem_rdataw[15:0]};//half word
+            2'b01: begin
+                if(alu_result_2r[1:0] == 2'b00)
+                    mem_rdata_r = {{24{wlongus[0] & mem_rdataw[7]}},mem_rdataw[7:0]};//byte
+                else if(alu_result_2r[1:0] == 2'b01)
+                    mem_rdata_r = {{24{wlongus[0] & mem_rdataw[15]}},mem_rdataw[15:8]};//byte
+                else if(alu_result_2r[1:0] == 2'b10)
+                    mem_rdata_r = {{24{wlongus[0] & mem_rdataw[23]}},mem_rdataw[23:16]};//byte
+                else
+                    mem_rdata_r = {{24{wlongus[0] & mem_rdataw[31]}},mem_rdataw[31:24]};//byte
+            end
+            2'b10: begin
+                if(alu_result_2r[1:0] == 2'b00)
+                    mem_rdata_r = {{16{wlongus[0] & mem_rdataw[15]}},mem_rdataw[15:0]};//half word
+                else mem_rdata_r = {{16{wlongus[0] & mem_rdataw[31]}},mem_rdataw[31:16]};//half word
+            end
             default: mem_rdata_r = mem_rdataw;
         endcase
     end
 
     always @(*)
     begin
-        if(wlong_3r == 2'b00)
+        if(wlong == 2'b00)
             mem_wdatacl = mem_wdata;
-        else if(wlong_3r == 2'b01)
-            mem_wdatacl = {24'b0,mem_wdata[7:0]};
-        else if(wlong_3r == 2'b10)
-            mem_wdatacl = {16'b0,mem_wdata[15:0]};
+        else if(wlong == 2'b01)
+            if(alu_result_2r[1:0] == 2'b00)
+                mem_wdatacl = {mem_rdataw[31:8],mem_wdata[7:0]};
+            else if(alu_result_2r[1:0] == 2'b01)
+                mem_wdatacl = {mem_rdataw[31:16],mem_wdata[7:0],mem_rdataw[7:0]};
+            else if(alu_result_2r[1:0] == 2'b10)
+                mem_wdatacl = {mem_rdataw[31:24],mem_wdata[7:0],mem_rdataw[15:0]};
+            else
+                mem_wdatacl = {mem_wdata[7:0],mem_rdataw[23:0]};
+        else if(wlong == 2'b10)
+            if(alu_result_2r[1:0] == 2'b00)
+                mem_wdatacl = {mem_rdataw[31:16],mem_wdata[15:0]};
+            else
+                mem_wdatacl = {mem_wdata[15:0],mem_rdataw[15:0]};
         else
             mem_wdatacl = mem_wdata;
     end
@@ -361,7 +386,7 @@ register_branch (
 
     //分支跳转
     branch branch(
-    .PC(PC_2r),
+    .PC(PC),
     .imm(imm),
     .rf_data1(rf_data1),
     .rf_data2(rf_data2),
@@ -430,18 +455,18 @@ register_branch (
         .spo(mem_rdataw),
         .we(mem_we),
         .clk(clk),
-        .dpra(addr[9:0]),
+        .dpra(addr[12:0]),
         .dpo(dout_dm)
         );
 
     //取、不能写指令
     dram_inst dram_inst(
-        .a(PC[11:2]),//四个字节对应一个字 in looogarch
+        .a(PC[14:2]),//四个字节对应一个字 in looogarch
         .d(32'b0),
         .spo(inst_rx),
         .we(1'b0),
         .clk(clk),
-        .dpra(addr[9:0]),
+        .dpra(addr[12:0]),
         .dpo(dout_im)
         );
 

@@ -461,12 +461,12 @@ module decoder(
             rf_addr2 = 5'b0;//其实用不到
             rf_rd = inst[4:0];
             rf_we = 1'b1;
-            imm = {20'b0, inst[21:10]};
+            imm = {{20{inst[21]}}, inst[21:10]};
             mem_we = 1'b0;
             alu_src1_sel = 2'b01;
             alu_src2_sel = 2'b00;
             alu_op = 12'b000000000001;
-            b_op = 12'b000000000001;
+            b_op = 12'b000000000000;//借用0标识一下
             wb_sel = 1'b0;
             br_type = 1'b0; 
             wlong = 2'b01;
@@ -477,12 +477,12 @@ module decoder(
             rf_addr2 = 5'b0;//其实用不到
             rf_rd = inst[4:0];
             rf_we = 1'b1;
-            imm = {20'b0, inst[21:10]};
+            imm = {{20{inst[21]}}, inst[21:10]};
             mem_we = 1'b0;
             alu_src1_sel = 2'b01;
             alu_src2_sel = 2'b00;
             alu_op = 12'b000000000001;
-            b_op = 12'b000000000001;
+            b_op = 12'b000000000000;//借用0标识一下
             wb_sel = 1'b0;
             br_type = 1'b0;
             wlong = 2'b10;
@@ -610,7 +610,7 @@ module decoder(
             alu_src1_sel = 2'b01;
             alu_src2_sel = 2'b01;
             alu_op = 12'h001;
-            b_op = 12'h801;
+            b_op = 12'h804;
             wb_sel = 1'b0;
             br_type = 1'b1;
             wlong = 2'b00;
@@ -642,7 +642,7 @@ module decoder(
             alu_src1_sel = 2'b01;
             alu_src2_sel = 2'b01;
             alu_op = 12'h001;
-            b_op = 12'h802;
+            b_op = 12'h808;
             wb_sel = 1'b0;
             br_type = 1'b1;
             wlong = 2'b00;

@@ -40,12 +40,20 @@ module hazard(
 
     always @(*)
     begin
-        if(jump_en || jump_en_r)
+        if(jump_en_r)
         begin
             PC_sel = 1'b1;
             rf_we_sel = 1'b1;
             mem_we_sel = 1'b1;
             inst_sel = 1'b1;
+            br_type_sel = 1'b1;
+        end
+        else if(jump_en)
+        begin
+            PC_sel = 1'b1;
+            rf_we_sel = 1'b1;
+            mem_we_sel = 1'b1;
+            inst_sel = 1'b0;
             br_type_sel = 1'b1;
             //jump_en_sel = 1'b1;
         end

@@ -28,8 +28,10 @@ module adder(
     output overflow,
     output [31:0] y
     );
+    logic [32:0] h;
 
-    assign {carry, y} = A + B +Cin;
+    assign h = {1'b0,A} + {1'b0,B} + {32'b0,Cin};
+    assign {carry, y} = h;
     assign overflow = (~Cin & ~A[31] & ~B[31] & y[31]) | (~Cin & A[31] & B[31] & ~y[31]) | (Cin & A[31] & ~B[31] & ~y[31]) | (Cin & ~A[31] & B[31] & y[31]);
 
 endmodule
