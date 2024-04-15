@@ -27,17 +27,22 @@ module forwarding(
     input [4:0] rf_rd_3r,
     input wb_sel_3r,
     output logic [1:0] rf_data1_sel,
-    output logic [1:0] rf_data2_sel
+    output logic [1:0] rf_data2_sel,
+    input logic stall1,
+    input logic stall2
     );
 
     //组合逻辑单元没有延迟，一个周期干好,通过寄存器里wb_sel指，提前判断给哪个（防止落到下一个周期更为复杂）
-    always @(*)
+
+    logic stall;
+    assign stall = stall1 | stall2;
+    always @(*)//stall时就不要进行判断啦
     begin
-        if(rf_addr1 == rf_rd_2r && rf_rd_2r != 5'b0)
+        if(rf_addr1 == rf_rd_2r && rf_rd_2r != 5'b0 && !stall1)
             rf_data1_sel = 2'b01;
-        else if(rf_addr1 == rf_rd_3r && wb_sel_3r == 1'b1)
+        else if(rf_addr1 == rf_rd_3r && wb_sel_3r == 1'b1 && !stall2)
             rf_data1_sel = 2'b10;
-        else if(rf_addr1 == rf_rd_3r && wb_sel_3r == 1'b0)
+        else if(rf_addr1 == rf_rd_3r && wb_sel_3r == 1'b0 && !stall2)
             rf_data1_sel = 2'b11;
         else
             rf_data1_sel = 2'b00;
@@ -45,11 +50,11 @@ module forwarding(
 
     always @(*)
     begin
-        if(rf_addr2 == rf_rd_2r && rf_rd_2r != 5'b0)
+        if(rf_addr2 == rf_rd_2r && rf_rd_2r != 5'b0 && !stall1)
             rf_data2_sel = 2'b01;
-        else if(rf_addr2 == rf_rd_3r && wb_sel_3r == 1'b1)
+        else if(rf_addr2 == rf_rd_3r && wb_sel_3r == 1'b1 && !stall2)
             rf_data2_sel = 2'b10;
-        else if(rf_addr2 == rf_rd_3r && wb_sel_3r == 1'b0)
+        else if(rf_addr2 == rf_rd_3r && wb_sel_3r == 1'b0 && !stall2)
             rf_data2_sel = 2'b11;
         else
             rf_data2_sel = 2'b00;

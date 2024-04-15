@@ -29,6 +29,7 @@ module top(
     input we_im,
     input clk_ld,
     input debug,
+    input [31:0] recei,
     output logic [31:0]CTL,
     output logic [31:0] PC,
     output logic [31:0]PC_chk,
@@ -41,7 +42,9 @@ module top(
     output logic [31:0]mem_rdata,
     output logic [31:0]dout_rf,
     output logic [31:0]dout_dm,
-    output logic [31:0]dout_im
+    output logic [31:0]dout_im,
+    output logic [31:0]out,
+    output logic out_we
   );
 
     logic        clk;
@@ -114,7 +117,20 @@ module top(
     //logic [1:0]  wlong_3r;
     logic [31:0] PC_r;
     logic [31:0] PC_2r;
+    logic [31:0] PC_3r;
+    logic [31:0] PC_4r;
+    logic [31:0] PC_5r;
 
+    logic        sta,sta1,sta2;
+    //logic        stall;
+
+    always@(posedge clk)
+    begin
+        sta1 <= sta;
+        sta2 <= sta1;
+    end
+
+    //assign stall = sta1 | sta2;
 
     assign mem_addr = alu_result_2r[14:2];
     //assign mem_wdata = rf_data2;//此时mem_wdata与rf_data2直接相连，但是rf_data2是执行阶段产生的信号，要到访存阶段才能写入内存，所以再加一个寄存器
@@ -127,6 +143,7 @@ module top(
         .rf_addr1(rf_addr1),
         .rf_addr2(rf_addr2),
         .rf_rd_2r(rf_rd_2r),
+        //.mem_addr(alu_result_r),
         .mem_we_2r(mem_we_2r),
         .wb_sel_2r(wb_sel_2r),
         .br_type(br_type),
@@ -134,7 +151,8 @@ module top(
         .rf_we_sel(rf_we_sel),
         .mem_we_sel(mem_we_sel),
         .inst_sel(inst_sel),
-        .br_type_sel(br_type_sel)
+        .br_type_sel(br_type_sel),
+        .sta(sta)
     );
 
     //数据相关前递单元
@@ -145,7 +163,9 @@ module top(
         .rf_rd_3r(rf_rd_3r),
         .wb_sel_3r(wb_sel_3r),
         .rf_data1_sel(rf_data1_sel),
-        .rf_data2_sel(rf_data2_sel)
+        .rf_data2_sel(rf_data2_sel),
+        .stall1(sta1),
+        .stall2(sta2)
     );
 
     //取指阶段->译码阶段
@@ -175,15 +195,15 @@ register_decode (
     );
 
     register #(
-        .WIDTH(34),
+        .WIDTH(130),
         .RST_VAL(0)
     )
 register_decode2(
     .clk(clk),
     .rstn(rstn),
     .en(1'b1),
-    .d({wlong_r,PC_r}),
-    .q({wlong_2r,PC_2r})
+    .d({wlong_r,PC_r,PC_2r,PC_3r,PC_4r}),
+    .q({wlong_2r,PC_2r,PC_3r,PC_4r,PC_5r})
     );
 
     //执行阶段->访存阶段
@@ -228,7 +248,11 @@ register_branch (
     always @(*)
     begin
         case (alu_src1_sel)
-            2'b00: alu_src1 = PC_2r;
+            2'b00: begin
+                if(!sta2)
+                alu_src1 = PC_2r;
+                else alu_src1 = PC_5r;
+            end
             2'b01: alu_src1 = rf_data1;
             2'b10: alu_src1 = 32'b0; 
             default: alu_src1 = rf_data1;
@@ -258,6 +282,9 @@ register_branch (
     //半字or字节读取导致增加的多选器
     always @(*)
     begin
+        if(alu_result_2r == 32'hFFFFFFFF)
+            mem_rdata_r = recei;
+        else
         case (wlong)
             2'b00: mem_rdata_r = mem_rdataw;
             2'b01: begin
@@ -343,7 +370,7 @@ register_branch (
     //PC rst and jump
     always @(posedge clk or negedge rstn) begin
         if(!rstn) begin
-            PC <= 32'h1c000000;
+            PC <= 32'h1c000000 - 32'd4;
         end 
         else PC <= npc;
     end
@@ -382,6 +409,21 @@ register_branch (
             br_type_r = 1'b0;
         else
             br_type_r = br_type_rx;
+    end
+
+    //外设管理
+    always@(*)
+    begin
+        if(alu_result_r == 32'hFFFFFFFF && mem_we_2r)
+        begin
+            out = rf_data2;
+            out_we = 1'b1;
+        end
+        else 
+        begin
+            out = 32'b0;
+            out_we = 1'b0;
+        end
     end
 
     //分支跳转
@@ -459,15 +501,28 @@ register_branch (
         .dpo(dout_dm)
         );
 
-    //取、不能写指令
-    dram_inst dram_inst(
-        .a(PC[14:2]),//四个字节对应一个字 in looogarch
-        .d(32'b0),
-        .spo(inst_rx),
-        .we(1'b0),
+    // //取、不能写指令
+    // dram_inst dram_inst(
+    //     .a(PC[14:2]),//四个字节对应一个字 in looogarch
+    //     .d(32'b0),
+    //     .spo(inst_rx),
+    //     .we(1'b0),
+    //     .clk(clk),
+    //     .dpra(addr[12:0]),
+    //     .dpo(dout_im)
+    //     );
+
+    icache icache(
+        .PC(npc),
         .clk(clk),
-        .dpra(addr[12:0]),
-        .dpo(dout_im)
-        );
+        .rstn(rstn),
+        .jump_en(jump_en),
+        .jump_en_r(jump_en_r),
+        .inst(inst_rx),
+        .sta(sta)
+    );
+    
+
+
 
 endmodule
