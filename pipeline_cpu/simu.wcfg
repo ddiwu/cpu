@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="simu_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="simu" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="77.851 ns"></ZoomEndTime>
+      <Cursor1Time time="66,947.750 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="245"></NameColumnWidth>
+      <ValueColumnWidth column_width="131"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="38" />
+   <wvobject fp_name="/simu/clk_cpu" type="logic">
+      <obj_property name="ElementShortName">clk_cpu</obj_property>
+      <obj_property name="ObjectShortName">clk_cpu</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/PC" type="array">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/inst" type="array">
+      <obj_property name="ElementShortName">inst[31:0]</obj_property>
+      <obj_property name="ObjectShortName">inst[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_data1_r" type="array">
+      <obj_property name="ElementShortName">rf_data1_r[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_data1_r[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_data2_r" type="array">
+      <obj_property name="ElementShortName">rf_data2_r[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_data2_r[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/jump_target" type="array">
+      <obj_property name="ElementShortName">jump_target[31:0]</obj_property>
+      <obj_property name="ObjectShortName">jump_target[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/PC_sel" type="logic">
+      <obj_property name="ElementShortName">PC_sel</obj_property>
+      <obj_property name="ObjectShortName">PC_sel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/br_type_r" type="logic">
+      <obj_property name="ElementShortName">br_type_r</obj_property>
+      <obj_property name="ObjectShortName">br_type_r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/wlong" type="array">
+      <obj_property name="ElementShortName">wlong[1:0]</obj_property>
+      <obj_property name="ObjectShortName">wlong[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/mem_rdataw" type="array">
+      <obj_property name="ElementShortName">mem_rdataw[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_rdataw[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/mem_addr" type="array">
+      <obj_property name="ElementShortName">mem_addr[12:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_addr[12:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/mem_rdata_r" type="array">
+      <obj_property name="ElementShortName">mem_rdata_r[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_rdata_r[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/mem_wdata" type="array">
+      <obj_property name="ElementShortName">mem_wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_wdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_rd_2r" type="array">
+      <obj_property name="ElementShortName">rf_rd_2r[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_rd_2r[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_rd" type="array">
+      <obj_property name="ElementShortName">rf_rd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_rd[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_we_sel" type="logic">
+      <obj_property name="ElementShortName">rf_we_sel</obj_property>
+      <obj_property name="ObjectShortName">rf_we_sel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_we_2r" type="logic">
+      <obj_property name="ElementShortName">rf_we_2r</obj_property>
+      <obj_property name="ObjectShortName">rf_we_2r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_we" type="logic">
+      <obj_property name="ElementShortName">rf_we</obj_property>
+      <obj_property name="ObjectShortName">rf_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/wb_sel" type="logic">
+      <obj_property name="ElementShortName">wb_sel</obj_property>
+      <obj_property name="ObjectShortName">wb_sel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/imm" type="array">
+      <obj_property name="ElementShortName">imm[31:0]</obj_property>
+      <obj_property name="ObjectShortName">imm[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_data1_r" type="array">
+      <obj_property name="ElementShortName">rf_data1_r[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_data1_r[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_data2_r" type="array">
+      <obj_property name="ElementShortName">rf_data2_r[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_data2_r[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/mem_we_r" type="logic">
+      <obj_property name="ElementShortName">mem_we_r</obj_property>
+      <obj_property name="ObjectShortName">mem_we_r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/mem_we_2r" type="logic">
+      <obj_property name="ElementShortName">mem_we_2r</obj_property>
+      <obj_property name="ObjectShortName">mem_we_2r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/mem_we" type="logic">
+      <obj_property name="ElementShortName">mem_we</obj_property>
+      <obj_property name="ObjectShortName">mem_we</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/b_op_r" type="array">
+      <obj_property name="ElementShortName">b_op_r[11:0]</obj_property>
+      <obj_property name="ObjectShortName">b_op_r[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/b_op" type="array">
+      <obj_property name="ElementShortName">b_op[11:0]</obj_property>
+      <obj_property name="ObjectShortName">b_op[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/branch/alu_result" type="array">
+      <obj_property name="ElementShortName">alu_result[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_result[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_addr1" type="array">
+      <obj_property name="ElementShortName">rf_addr1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_addr1[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/rf_addr2" type="array">
+      <obj_property name="ElementShortName">rf_addr2[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_addr2[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/alu_op" type="array">
+      <obj_property name="ElementShortName">alu_op[11:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_op[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/alu_src1" type="array">
+      <obj_property name="ElementShortName">alu_src1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_src1[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/alu_src2" type="array">
+      <obj_property name="ElementShortName">alu_src2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_src2[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/alu_result_r" type="array">
+      <obj_property name="ElementShortName">alu_result_r[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_result_r[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/ALU/Cin" type="logic">
+      <obj_property name="ElementShortName">Cin</obj_property>
+      <obj_property name="ObjectShortName">Cin</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/jump_en" type="logic">
+      <obj_property name="ElementShortName">jump_en</obj_property>
+      <obj_property name="ObjectShortName">jump_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/jump_en_r" type="logic">
+      <obj_property name="ElementShortName">jump_en_r</obj_property>
+      <obj_property name="ObjectShortName">jump_en_r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simu/top_inst/reg_files_inst/rf" type="array">
+      <obj_property name="ElementShortName">rf[0:31][31:0]</obj_property>
+      <obj_property name="ObjectShortName">rf[0:31][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+</wave_config>
