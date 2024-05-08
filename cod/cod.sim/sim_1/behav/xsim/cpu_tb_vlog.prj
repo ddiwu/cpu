@@ -1,0 +1,43 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../cod.gen/sources_1/ip/dist_mem_gen_0/sim/dist_mem_gen_0.v" \
+"../../../../../PART-code/ALU.v" \
+"../../../../../PART-code/IdExSegReg/AddrEx.v" \
+"../../../../../PART-code/ExMemSegReg/AddrMem.v" \
+"../../../../../PART-code/MemWbSegReg/AddrWb.v" \
+"../../../../../PART-code/IdExSegReg/BrTarget.v" \
+"../../../../../PART-code/BranchDecision.v" \
+"../../../../../PART-code/CSR/CSR_EX.v" \
+"../../../../../PART-code/CSR/CSR_Regfile.v" \
+"../../../../../PART-code/ControllerDecoder.v" \
+"../../../../../PART-code/IdExSegReg/CtrlEx.v" \
+"../../../../../PART-code/ExMemSegReg/CtrlMem.v" \
+"../../../../../PART-code/MemWbSegReg/CtrlWb.v" \
+"../../../../../PART-code/DataExtend.v" \
+"../../../../../PART-code/GeneralRegister.v" \
+"../../../../../PART-code/Hazard.v" \
+"../../../../../PART-code/IfIdSegReg/IR.v" \
+"../../../../../PART-code/IdExSegReg/Imm.v" \
+"../../../../../PART-code/ImmExtend.v" \
+"../../../../../PART-code/NPCGenerator.v" \
+"../../../../../PART-code/IdExSegReg/Op1.v" \
+"../../../../../PART-code/PC.v" \
+"../../../../../PART-code/IdExSegReg/PcEx.v" \
+"../../../../../PART-code/IfIdSegReg/PcId.v" \
+"../../../../../PART-code/RV32ICore.v" \
+"../../../../../PART-code/IdExSegReg/Reg2Ex.v" \
+"../../../../../PART-code/ExMemSegReg/Reg2Mem.v" \
+"../../../../../PART-code/ExMemSegReg/Result.v" \
+"../../../../../PART-code/MemWbSegReg/WbData.v" \
+
+sv xil_defaultlib  \
+"../../../../../PART-code/cache.sv" \
+"../../../../../PART-code/main_mem.sv" \
+"../../../../../PART-code/mem.sv" \
+"../../../../cod.srcs/sim_1/new/cpu_tb.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
